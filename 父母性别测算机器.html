@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>父母性别测算器</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      font-family: "Microsoft YaHei", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .box {
+      width: 420px;
+      background: white;
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      font-size: 16px;
+    }
+
+    button {
+      margin: 10px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 999px;
+      background: #4f7cff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #365ee8;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .loading {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff4f7b;
+      line-height: 1.5;
+    }
+
+    .small {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <div id="step1">
+      <h1>父母性别测算器</h1>
+      <p>基于高级生物学模型与早餐摄入频率进行精准测算。</p>
+      <p>请选择你要测算的对象：</p>
+      <button onclick="chooseParent('父亲')">测算生物父亲性别</button>
+      <button onclick="chooseParent('母亲')">测算生物母亲性别</button>
+    </div>
+
+    <div id="step2" class="hidden">
+      <h1>测算前信息采集</h1>
+      <p>请认真回答以下问题：</p>
+      <p>你今天吃早饭了吗？</p>
+      <button onclick="breakfastAnswer('吃了')">吃了</button>
+      <button onclick="breakfastAnswer('没吃')">没吃</button>
+      <button onclick="breakfastAnswer('忘了')">忘了</button>
+    </div>
+
+    <div id="loading" class="hidden">
+      <h1>正在测算中……</h1>
+      <p class="loading" id="loadingText">正在分析早餐与亲缘性别关系...</p>
+    </div>
+
+    <div id="result" class="hidden">
+      <h1>测算完成！</h1>
+      <div class="result" id="resultText"></div>
+      <div class="small">本测算结果由父母性别测算器权威发布。</div>
+      <button onclick="restart()">重新测算</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedParent = "";
+
+    function chooseParent(parent) {
+      selectedParent = parent;
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+    }
+
+    function breakfastAnswer(answer) {
+      document.getElementById("step2").classList.add("hidden");
+      document.getElementById("loading").classList.remove("hidden");
+
+      const texts = [
+        "正在读取早餐记录...",
+        "正在连接生物学数据库...",
+        "正在计算性别概率...",
+        "正在排除不必要的逻辑...",
+        "正在生成最终结果..."
+      ];
+
+      let i = 0;
+      const loadingText = document.getElementById("loadingText");
+
+      const timer = setInterval(() => {
+        loadingText.textContent = texts[i];
+        i++;
+
+        if (i >= texts.length) {
+          clearInterval(timer);
+          showResult();
+        }
+      }, 700);
+    }
+
+    function showResult() {
+      document.getElementById("loading").classList.add("hidden");
+      document.getElementById("result").classList.remove("hidden");
+
+      let gender = "";
+
+      if (selectedParent === "父亲") {
+        gender = "女性";
+      } else {
+        gender = "男性";
+      }
+
+      document.getElementById("resultText").innerHTML =
+        "您的" + selectedParent + "的性别是：<br>" + gender + "！";
+    }
+
+    function restart() {
+      selectedParent = "";
+      document.getElementById("result").classList.add("hidden");
+      document.getElementById("step1").classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>
